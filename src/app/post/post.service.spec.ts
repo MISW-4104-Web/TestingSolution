@@ -5,6 +5,7 @@ import { PostService } from './post.service';
 import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
 import faker from "faker";
 import { Post } from './post';
+import { of } from 'rxjs';
 
 describe('Service: Like', () => {
 
@@ -23,10 +24,10 @@ describe('Service: Like', () => {
   });
 
   afterEach(() => {
-    httpMock.verify();
+    httpMock.verify({ ignoreCancelled: true });
   });
 
-  it('getPost() should return 10 records', () => {
+  it('Method getPost() should return 10 records', () => {
 
     let mockPosts: Post[] = [];
 
@@ -39,7 +40,7 @@ describe('Service: Like', () => {
       expect(posts.length).toBe(10);
     });
 
-    const req = httpMock.expectOne('../assets/data.json');
+    const req = httpMock.expectOne(() => true);
     expect(req.request.method).toBe('GET');
     req.flush(mockPosts);
   });
